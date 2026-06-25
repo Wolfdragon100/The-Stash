@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Snack Drawer</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #1a1a18;
+      --surface: #242421;
+      --text: #f0ede6;
+      --muted: #9e9b92;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    header h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    header p {
+      margin-top: 0.6rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .card {
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-swatch {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.2rem;
+      height: 130px;
+      transition: transform 0.18s ease;
+    }
+
+    .card:hover .card-swatch {
+      transform: scale(1.06);
+    }
+
+    .card-body {
+      background: var(--surface);
+      padding: 0.75rem 0.85rem 0.9rem;
+      flex: 1;
+    }
+
+    .card-name {
+      font-family: 'Fraunces', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    .card-desc {
+      margin-top: 0.25rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .empty-badge {
+      opacity: 0.38;
+      position: relative;
+    }
+
+    .empty-badge::after {
+      content: 'OUT';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      background: rgba(0,0,0,0.45);
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card-swatch { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Snack Drawer</h1>
+  <p>Updated as needed</p>
+</header>
+
+<div class="grid" id="snack-grid"></div>
+
+<script>
+  // ─── EDIT THIS LIST ───────────────────────────────────────────────
+  // Fields:
+  //   name    — display name
+  //   emoji   — the big icon (or swap for an <img> path if you have one)
+  //   color   — background color of the swatch
+  //   desc    — short description (one line is best)
+  //   inStock — true or false
+  const snacks = [
+    { name: "Kettle Chips", emoji: "🥔", color: "#c8863a", desc: "Sea salt & vinegar", inStock: true },
+    { name: "Dark Chocolate", emoji: "🍫", color: "#4a2c1a", desc: "72% cacao, individually wrapped", inStock: true },
+    { name: "Almonds", emoji: "🤎", color: "#b07d4e", desc: "Roasted, lightly salted", inStock: true },
+    { name: "Fruit Snacks", emoji: "🍬", color: "#d45f7a", desc: "Assorted flavors", inStock: true },
+    { name: "Granola Bars", emoji: "🌾", color: "#8a7a52", desc: "Oats & honey", inStock: true },
+    { name: "Pretzels", emoji: "🥨", color: "#c9a96e", desc: "Mini twists", inStock: false },
+    { name: "Trail Mix", emoji: "🥜", color: "#6b8f5e", desc: "Nuts, raisins, M&Ms", inStock: true },
+    { name: "Gum", emoji: "🫧", color: "#5a9fbf", desc: "Spearmint", inStock: true },
+    { name: "Rice Cakes", emoji: "⬜", color: "#a0a09a", desc: "Plain, lightly salted", inStock: false },
+    { name: "Popcorn", emoji: "🍿", color: "#d4a843", desc: "Classic butter", inStock: true },
+    { name: "Crackers", emoji: "🟫", color: "#b8916a", desc: "Whole grain", inStock: true },
+    { name: "Dried Mango", emoji: "🥭", color: "#e07b39", desc: "No added sugar", inStock: true },
+  ];
+  // ─────────────────────────────────────────────────────────────────
+
+  const grid = document.getElementById('snack-grid');
+
+  snacks.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'card' + (s.inStock ? '' : ' empty-badge');
+
+    card.innerHTML = `
+      <div class="card-swatch" style="background:${s.color}">${s.emoji}</div>
+      <div class="card-body">
+        <div class="card-name">${s.name}</div>
+        <div class="card-desc">${s.desc}</div>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+</script>
+
+</body>
+</html>
