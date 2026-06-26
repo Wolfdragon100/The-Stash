@@ -16,102 +16,97 @@
       --muted: #9e9b92;
     }
 
-    /* ── Drawer intro ── */
-    #intro {
-      position: fixed;
-      inset: 0;
-      background: var(--bg);
-      z-index: 300;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      perspective: 800px;
-    }
-
-    #intro.hide {
-      pointer-events: none;
-      animation: introFade 0.5s ease forwards;
-    }
-
-    @keyframes introFade {
-      to { opacity: 0; }
-    }
-
-    .drawer-scene {
-      width: 260px;
-      height: 160px;
-      position: relative;
-      transform-style: preserve-3d;
-      animation: drawerPull 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-      animation-delay: 0.3s;
-      transform: rotateX(28deg) translateZ(0px);
-    }
-
-    @keyframes drawerPull {
-      0%   { transform: rotateX(28deg) translateZ(0px);   }
-      60%  { transform: rotateX(18deg) translateZ(130px); }
-      80%  { transform: rotateX(20deg) translateZ(110px); }
-      100% { transform: rotateX(18deg) translateZ(120px); }
-    }
-
-    /* Drawer box face */
-    .drawer-face {
-      position: absolute;
-      inset: 0;
-      background: #3a2e22;
-      border-radius: 10px;
-      border: 2px solid #5a4535;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Handle */
-    .drawer-handle {
-      width: 60px;
-      height: 12px;
-      background: #c9a97a;
-      border-radius: 6px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-    }
-
-    /* Inside of drawer (top face) */
-    .drawer-inside {
-      position: absolute;
-      width: 100%;
-      height: 80px;
-      background: #2a2018;
-      top: -78px;
-      border-radius: 6px 6px 0 0;
-      transform: rotateX(-90deg);
-      transform-origin: bottom center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      font-size: 1.6rem;
-      padding: 0 16px;
-    }
-
-    /* ── Main content ── */
     body {
       background: var(--bg);
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
+    }
+
+    /* ── Landing page ── */
+    #landing {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    #landing.hide {
+      animation: fadeOut 0.5s ease forwards;
+      pointer-events: none;
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; }
+    }
+
+    .landing-label {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--muted);
+      letter-spacing: 0.01em;
+    }
+
+    /* Illustrated drawer */
+    .drawer-wrap {
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+
+    .drawer-wrap:hover {
+      transform: translateY(-4px);
+    }
+
+    .drawer-wrap:active {
+      transform: translateY(0px);
+    }
+
+    /* SVG drawer open animation */
+    .drawer-front {
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      transform-origin: bottom center;
+    }
+
+    .drawer-wrap.opening .drawer-front {
+      transform: translateY(60px);
+    }
+
+    .drawer-contents {
+      opacity: 0;
+      transition: opacity 0.3s ease 0.3s;
+    }
+
+    .drawer-wrap.opening .drawer-contents {
+      opacity: 1;
+    }
+
+    .click-hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      opacity: 0.5;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: -0.5rem;
+    }
+
+    /* ── Main content ── */
+    #main-content {
+      display: none;
+      opacity: 0;
       padding: 2.5rem 1.5rem 4rem;
     }
 
-    #main-content {
-      opacity: 0;
-    }
-
     #main-content.visible {
-      animation: mainFadeIn 0.6s ease forwards;
+      display: block;
+      animation: fadeIn 0.6s ease forwards;
     }
 
-    @keyframes mainFadeIn {
+    @keyframes fadeIn {
       to { opacity: 1; }
     }
 
@@ -234,9 +229,7 @@
       cursor: zoom-out;
     }
 
-    .lightbox.active {
-      display: flex;
-    }
+    .lightbox.active { display: flex; }
 
     .lightbox img {
       max-width: 90vw;
@@ -247,32 +240,52 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      #intro { display: none; }
-      #main-content { opacity: 1; }
       .card { animation: none; opacity: 1; }
     }
   </style>
 </head>
 <body>
 
-<!-- Drawer intro animation -->
-<div id="intro">
-  <div class="drawer-scene">
-    <div class="drawer-inside">🍫 🥜 🍬 🌾 🥨</div>
-    <div class="drawer-face">
-      <div class="drawer-handle"></div>
-    </div>
+<!-- Landing -->
+<div id="landing">
+  <div class="landing-label">Click to see goodies</div>
+
+  <div class="drawer-wrap" id="drawer-wrap">
+    <svg width="260" height="200" viewBox="0 0 260 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Drawer body / casing -->
+      <rect x="10" y="10" width="240" height="180" rx="12" fill="#2e2318" stroke="#4a3828" stroke-width="2"/>
+      <!-- Inside of drawer (snacks revealed when open) -->
+      <g class="drawer-contents">
+        <text x="50" y="100" font-size="28">🍫</text>
+        <text x="100" y="100" font-size="28">🥜</text>
+        <text x="150" y="100" font-size="28">🍬</text>
+        <text x="95" y="135" font-size="28">🌾</text>
+        <text x="140" y="135" font-size="22">🥨</text>
+      </g>
+      <!-- Drawer face (slides down on click) -->
+      <g class="drawer-front">
+        <rect x="10" y="10" width="240" height="180" rx="12" fill="#4a3220" stroke="#6b4d30" stroke-width="2"/>
+        <!-- Wood grain lines -->
+        <line x1="10" y1="65" x2="250" y2="65" stroke="#3d2a18" stroke-width="1" opacity="0.6"/>
+        <line x1="10" y1="120" x2="250" y2="120" stroke="#3d2a18" stroke-width="1" opacity="0.6"/>
+        <!-- Handle -->
+        <rect x="95" y="88" width="70" height="14" rx="7" fill="#c9a97a" stroke="#a8885a" stroke-width="1.5"/>
+        <circle cx="118" cy="95" r="3" fill="#a8885a"/>
+        <circle cx="142" cy="95" r="3" fill="#a8885a"/>
+      </g>
+    </svg>
   </div>
+
+  <div class="click-hint">tap anywhere on the drawer</div>
 </div>
 
-<!-- Main page -->
+<!-- Main snack page -->
 <div id="main-content">
   <header>
     <h1>The Stash</h1>
     <p>Good stuff inside<br>😋</p>
     <div class="updated" id="updated-date"></div>
   </header>
-
   <div class="grid" id="snack-grid"></div>
 </div>
 
@@ -281,17 +294,20 @@
 </div>
 
 <script>
-  // Drawer intro → then show page
-  const intro = document.getElementById('intro');
+  const drawerWrap = document.getElementById('drawer-wrap');
+  const landing = document.getElementById('landing');
   const mainContent = document.getElementById('main-content');
 
-  setTimeout(() => {
-    intro.classList.add('hide');
+  drawerWrap.addEventListener('click', () => {
+    drawerWrap.classList.add('opening');
     setTimeout(() => {
-      intro.style.display = 'none';
-      mainContent.classList.add('visible');
-    }, 500);
-  }, 2200);
+      landing.classList.add('hide');
+      setTimeout(() => {
+        landing.style.display = 'none';
+        mainContent.classList.add('visible');
+      }, 500);
+    }, 800);
+  });
 
   // ─── EDIT THIS DATE whenever you update the inventory ───
   const lastUpdated = "June 25, 2026";
