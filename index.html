@@ -45,6 +45,13 @@
       text-transform: uppercase;
     }
 
+    .updated {
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      opacity: 0.6;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -53,12 +60,21 @@
       margin: 0 auto;
     }
 
+    /* Card fade-in animation */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
     .card {
       border-radius: 14px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       position: relative;
+      cursor: pointer;
+      opacity: 0;
+      animation: fadeUp 0.4s ease forwards;
     }
 
     .card-swatch {
@@ -97,7 +113,7 @@
       line-height: 1.45;
     }
 
-    /* Full image overlay on hover */
+    /* Hover overlay */
     .card-overlay {
       position: fixed;
       top: 50%;
@@ -141,6 +157,30 @@
       padding: 0 1rem 1rem;
     }
 
+    /* Click to enlarge — lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.8);
+    }
+
     .empty-badge {
       opacity: 0.38;
       position: relative;
@@ -162,6 +202,7 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
+      .card { animation: none; opacity: 1; }
       .card-overlay { transition: none; }
     }
   </style>
@@ -171,11 +212,23 @@
 <header>
   <h1>The Stash</h1>
   <p>Good stuff inside<br>😋</p>
+  <div class="updated" id="updated-date"></div>
 </header>
 
 <div class="grid" id="snack-grid"></div>
 
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <img id="lightbox-img" src="" alt="" />
+</div>
+
 <script>
+  // ─── EDIT THIS DATE whenever you update the inventory ───
+  const lastUpdated = "June 25, 2026";
+  // ────────────────────────────────────────────────────────
+
+  document.getElementById('updated-date').textContent = "Last updated: " + lastUpdated;
+
   const snacks = [
     { name: "Cinnamon Pistachios", emoji: "<img src='cinnamonpistachios.png'>", color: "#c8863a", desc: "Yum :)", inStock: true },
     { name: "Chocolate Walnuts", emoji: "<img src='chocowalnuts.jpg'>", color: "#4a2c1a", desc: "Also Yum :)", inStock: true },
@@ -189,10 +242,17 @@
   ];
 
   const grid = document.getElementById('snack-grid');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
 
-  snacks.forEach(s => {
+  snacks.forEach((s, i) => {
     const card = document.createElement('div');
     card.className = 'card' + (s.inStock ? '' : ' empty-badge');
+    card.style.animationDelay = (i * 0.06) + 's';
+
+    // Extract image src for lightbox
+    const srcMatch = s.emoji.match(/src='([^']+)'/);
+    const imgSrc = srcMatch ? srcMatch[1] : null;
 
     card.innerHTML = `
       <div class="card-swatch" style="background:${s.color}">${s.emoji}</div>
@@ -207,7 +267,18 @@
       </div>
     `;
 
+    if (imgSrc) {
+      card.addEventListener('click', () => {
+        lightboxImg.src = imgSrc;
+        lightbox.classList.add('active');
+      });
+    }
+
     grid.appendChild(card);
+  });
+
+  lightbox.addEventListener('click', () => {
+    lightbox.classList.remove('active');
   });
 </script>
 
