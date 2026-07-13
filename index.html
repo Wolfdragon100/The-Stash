@@ -317,20 +317,22 @@
   document.getElementById('updated-date').textContent = "Last updated: " + lastUpdated;
 
   const snacks = [
+    { name: "Lemon Thins", emoji: "<img src=lemon.png'>", color: "#f2d675", desc: "Lemony Goodness", inStock: true },
+    { name: "Peanut Butter Cookies", emoji: "<img src='pb.webp'>", color: "#c68e4e", desc: "mmmmm", inStock: true },
+    { name: "Himilayan Sea Salt Crackers", emoji: "<img src='cracker.jpg'>", color: "#e8c9b0", desc: "Pleasant", inStock: true },
     { name: "Seven Sundays Granola", emoji: "<img src='granola.webp'>", color: "#f2a7b0", desc: "Pleasant", inStock: true },
     { name: "Fruit Jerky", emoji: "<img src='jerky.jpg'>", color: "#5a9cbd", desc: "Refrigerate for extra chewy toughness", inStock: true },
-    { name: "Fruit Jerky", emoji: "<img src='jerky3.webp'>", color: "#e8778a", desc: "Refrigerate for extra chewy toughness", inStock: true },
     { name: "Junkless Chewy Bars", emoji: "<img src='junkless.webp'>", color: "#c93a3a", desc: "🍓", inStock: true },
     { name: "Bear Fruit Splits", emoji: "<img src='fruit.jpg'>", color: "#b5c96a", desc: "Do bears like fruit?", inStock: true },
     { name: "Cinnamon Pistachios", emoji: "<img src='cinnamonpistachios.png'>", color: "#c8863a", desc: "Yum :)", inStock: true },
     { name: "Chocolate Walnuts", emoji: "<img src='chocowalnuts.jpg'>", color: "#4a2c1a", desc: "Definitely also yum :)", inStock: true },
     { name: "Blueberry Rollers", emoji: "<img src='Blueberry.webp'>", color: "#5b4fcf", desc: "Lightly Sweet Treat", inStock: true },
-    { name: "Carob Cups", emoji: "<img src='missy.webp'>", color: "#5c3a1e", desc: "Only For Adventurous Snackers", inStock: true },
+    { name: "Carob Cups", emoji: "<img src='missy.webp'>", color: "#5c3a1e", desc: "Only For Adventurous Snackers", inStock: false },
     { name: "Coconut Bits", emoji: "<img src='coconut.webp'>", color: "#d4b896", desc: "Taste the tropics", inStock: true },
     { name: "Kind Bar", emoji: "<img src='kind.jpg'>", color: "#e8924a", desc: "Peanuty Goodness", inStock: true },
     { name: "Cookies", emoji: "<img src='cookiec.webp'>", color: "#c9a05a", desc: "Crispy", inStock: true },
     { name: "Dried Mango", emoji: "<img src='mango.jpg'>", color: "#f5a623", desc: "Indulgent", inStock: true },
-    { name: "Dried Pineapple", emoji: "<img src='pineapple.jpg'>", color: "#f5c842", desc: "Mmmm, tangy", inStock: true },
+    { name: "Dried Pineapple", emoji: "<img src='pineapple.jpg'>", color: "#f5c842", desc: "Mmmm, tangy", inStock: false },
   ];
 
   const grid = document.getElementById('snack-grid');
